@@ -146,6 +146,10 @@ var _reactRouter = __webpack_require__(6);
 
 var _reactRouterConfig = __webpack_require__(19);
 
+var _serializeJavascript = __webpack_require__(22);
+
+var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
+
 var _Routes = __webpack_require__(7);
 
 var _Routes2 = _interopRequireDefault(_Routes);
@@ -167,7 +171,7 @@ exports.default = function (req, store) {
         )
     ));
 
-    return '\n    <html>\n        <head></head>\n        <body>\n            <div id="root">' + content + '</div>\n            <script src="bundle.js"></script>\n        </body>\n    </html>\n    ';
+    return '\n    <html>\n        <head></head>\n        <body>\n            <div id="root">' + content + '</div>\n            <script>\n            window.INITIAL_STATE = ' + (0, _serializeJavascript2.default)(store.getState()) + '\n            </script>\n            <script src="bundle.js"></script>\n        </body>\n    </html>\n    ';
 };
 
 /***/ }),
@@ -177,43 +181,7 @@ exports.default = function (req, store) {
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Home = function Home() {
-    return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-            'div',
-            null,
-            'I\'M THE HOME COMPONENT'
-        ),
-        _react2.default.createElement(
-            'button',
-            { onClick: function onClick(e) {
-                    return console.log('ffff');
-                } },
-            'wefsd'
-        )
-    );
-};
-exports.default = Home;
-
-/***/ }),
+/* 5 */,
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -230,29 +198,28 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Home = __webpack_require__(5);
+var _HomePage = __webpack_require__(20);
 
-var _Home2 = _interopRequireDefault(_Home);
+var _HomePage2 = _interopRequireDefault(_HomePage);
 
-var _UsersList = __webpack_require__(17);
+var _UsersListPage = __webpack_require__(21);
 
-var _UsersList2 = _interopRequireDefault(_UsersList);
+var _UsersListPage2 = _interopRequireDefault(_UsersListPage);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = [{
+exports.default = [_extends({}, _HomePage2.default, {
     path: '/',
-    component: _Home2.default,
     exact: true
-}, {
-    loadData: _UsersList.loadData,
-    path: '/users',
-    component: _UsersList2.default
-}];
+}), _extends({}, _UsersListPage2.default, {
+    path: '/users'
+})];
 
 /***/ }),
 /* 8 */,
@@ -411,7 +378,20 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
 module.exports = require("axios");
 
 /***/ }),
-/* 17 */
+/* 17 */,
+/* 18 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-polyfill");
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-config");
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -420,7 +400,45 @@ module.exports = require("axios");
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.loadData = undefined;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Home = function Home() {
+    return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+            'div',
+            null,
+            'I\'M THE HOME COMPONENT'
+        ),
+        _react2.default.createElement(
+            'button',
+            { onClick: function onClick(e) {
+                    return console.log('ffff');
+                } },
+            'wefsd'
+        )
+    );
+};
+exports.default = {
+    component: Home
+};
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -491,20 +509,17 @@ function mapStateToProps(state) {
 function loadData(store) {
     return store.dispatch((0, _actions.fetchUsers)());
 }
-exports.loadData = loadData;
-exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList);
+
+exports.default = {
+    loadData: loadData,
+    component: (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList)
+};
 
 /***/ }),
-/* 18 */
+/* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-polyfill");
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-router-config");
+module.exports = require("serialize-javascript");
 
 /***/ })
 /******/ ]);
